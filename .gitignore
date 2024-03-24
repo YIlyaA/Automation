@@ -1,0 +1,15 @@
+.idea
+/REPORT1/.ipynb_checkpoints
+/REPORT1/bins
+/REPORT1/results
+/REPORT1/tests
+/REPORT1/times
+/REPORT1/main.py
+/REPORT1/test.py
+/REPORT2/.ipynb_checkpoints
+/REPORT2/bins
+/REPORT2/results
+/REPORT2/sources
+/REPORT2/tests
+/venv
+
