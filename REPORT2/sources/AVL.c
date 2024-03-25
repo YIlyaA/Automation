@@ -28,26 +28,6 @@ int maximum(int a, int b) {
     return (a > b) ? a : b;
 }
 
-Node* rotateRight(Node* y) {
-    Node* x = y->left;
-    Node* T2 = x->right;
-
-    x->right = y;
-    y->left = T2;
-
-    return x;
-}
-
-Node* rotateLeft(Node* x) {
-    Node* y = x->right;
-    Node* T2 = y->left;
-
-    y->left = x;
-    x->right = T2;
-
-    return y;
-}
-
 Node* insert(Node* node, int key) {
     if (node == NULL) return newNode(key);
 
@@ -81,27 +61,6 @@ void bubbleSort(int arr[], int size) {
     }
 }
 
-Node* balanceNode(Node* node) {
-    int balance = height(node->left) - height(node->right);
-
-    if (balance > 1) {
-        if (height(node->left->left) >= height(node->left->right))
-            return rotateRight(node);
-        else {
-            node->left = rotateLeft(node->left);
-            return rotateRight(node);
-        }
-    }
-    if (balance < -1) {
-        if (height(node->right->right) >= height(node->right->left))
-            return rotateLeft(node);
-        else {
-            node->right = rotateRight(node->right);
-            return rotateLeft(node);
-        }
-    }
-    return node;
-}
 
 Node* constructAVL(int numbers[], int begin, int end, Node* root, int height)
 {
@@ -166,14 +125,8 @@ int main() {
     end = what_time_is_it();
     find_min_time = end - start;
 
-    start = what_time_is_it();
-    root = balanceNode(root);
-    end = what_time_is_it();
-    balance_time = end - start;
-
     printf("create_time: %.15f\n", create_time);
     printf("find_min_time: %.15f\n", find_min_time);
-    printf("balance_time: %.15f\n", balance_time);
 
     return 0;
 }
