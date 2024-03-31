@@ -40,7 +40,7 @@ def compile_sources(sources, bins, v=False):
         if ext == 'cpp':
             command = ['g++', '{}/{}'.format(sources, code), '-o', '{}/{}'.format(bins, bin_name)]
         else:
-            command = ['gcc', '{}/{}'.format(sources, code), '-o', '{}/{}'.format(bins, bin_name)]
+            command = ['gcc', '{}/{}'.format(sources, code), '-o', '{}/{}'.format(bins, bin_name), '-lm']
         a = subprocess.run(command, capture_output=True)
         print('Executing: {}'.format(' '.join(command)))
         if v:
@@ -99,18 +99,23 @@ def read_results(results):
     return res_create, res_find_min, res_balance
 
 
-def plot_graf(dictionary, marker, linestyle):
+def plot_graf(dictionary, marker, linestyle, undtitle=False):
+    # print(dictionary)
     for algo in dictionary:
         if algo == "BST":
             linestyle = '--'
-        x = dictionary[algo]['x']
-        y = dictionary[algo]['y']
+        x = sorted(dictionary[algo]['x'])
+        y = sorted(dictionary[algo]['y'])
         plt.plot(x, y, marker=marker, linestyle=linestyle, label=algo)
 
-        plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2e'))
+        # plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2e'))
         plt.xlabel("ilość danych wejściowych")
         plt.ylabel("sekundy (s)")
-        # plt.yscale('log')
-
+        plt.yscale('log')
+    if undtitle:
+        plt.figtext(0.5, -0.02, "*Dla małych liczb czas dla AVL poniżej dolnej granicy pomiaru.*",
+                    ha='center',
+                    fontsize=10,
+                    fontstyle='italic')
     plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
     plt.show()

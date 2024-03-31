@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#pragma warning(disable : 4996)
-
 typedef struct Node {
     int key;
     struct Node *left, *right;
@@ -134,7 +132,7 @@ void preorderTraversal(Node* root) {
     preorderTraversal(root->right);
 }
 
-void printBST(struct Node *root, int level) {
+/*void printBST(struct Node *root, int level) {
     //printf("");
 
     if (root != NULL) {
@@ -147,7 +145,7 @@ void printBST(struct Node *root, int level) {
     }
     //printf("");
 
-}
+} */
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -192,7 +190,7 @@ int main() {
     start = what_time_is_it();
     minValueNode(root);
     Node *minNode = minValueNode(root);  // output min value
-    printf("Min: %d\n", minNode->key);
+    //printf("Min: %d\n", minNode->key);
     end = what_time_is_it();
     find_min_time += (end - start);
 
@@ -203,10 +201,10 @@ int main() {
     balance_time += (end - start);
 //    printBST(root, 0);     // uncomment if you wnat to see nodes and keys after balancing
 
-    printf("create_time: %.15f\n", create_time);
-    printf("balance_time: %.15f\n", balance_time);
-    printf("find_min_time: %.15f\n", find_min_time);
+    printf("create_time: %.20f\n", create_time);
+    printf("balance_time: %.20f\n", balance_time);
+    printf("find_min_time: %.20f\n", find_min_time);
 
-    preorderTraversal(root);
+    //preorderTraversal(root);
     return 0;
 }

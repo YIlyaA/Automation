@@ -69,10 +69,11 @@ Node* constructAVL(int numbers[], int begin, int end, Node* root, int height)
         return root;
     }
     int mid = (begin + end) / 2;
+    //printf("%d\n", mid);
 
     root = insert(root, numbers[mid]);
 
-    root = constructAVL(numbers, 0, mid - 1, root, height + 1);
+    root = constructAVL(numbers, begin, mid - 1, root, height + 1);
     root = constructAVL(numbers, mid + 1, end, root, height + 1);
 
 }
@@ -109,7 +110,14 @@ int main() {
     for (int i = 0; i < n; i++) {
         scanf("%d", &key);
         numbers[i] = key;
+
     }
+    /*
+    for (int i = 0; i < n; ++i) {
+        key = rand() % 100 + 1;
+        numbers[i] = key;
+        printf("%d ", key);
+    }*/
 
     bubbleSort(numbers, n);
 
@@ -121,12 +129,13 @@ int main() {
 
     start = what_time_is_it();
     Node* minNode = minValueNode(root);
-    printf("min: %d\n", minNode->key);
+    //printf("min: %d\n", minNode->key);
     end = what_time_is_it();
     find_min_time = end - start;
 
-    printf("create_time: %.15f\n", create_time);
-    printf("find_min_time: %.15f\n", find_min_time);
+    
+    printf("create_time: %.20f\n", create_time);
+    printf("find_min_time: %.20f\n", find_min_time);
 
     return 0;
 }
