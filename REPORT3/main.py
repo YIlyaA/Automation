@@ -1,12 +1,9 @@
 import os
-import random
 import subprocess
 import math
 from matplotlib import pyplot as plt
 import networkx as nx
 import random
-
-peak = 0
 
 
 def mkdir(directory):
@@ -14,6 +11,7 @@ def mkdir(directory):
         os.mkdir(directory)
     except FileExistsError:
         pass
+
 
 def generate_acyclic_graph(num_nodes, num_edges):
     graph = nx.DiGraph()
@@ -28,19 +26,18 @@ def generate_acyclic_graph(num_nodes, num_edges):
                 graph.add_edge(node_from, node_to)
 
     return list(graph.edges())
-def create_tests(test_dir, test_sizes, maxim, minimum):
+
+
+def create_tests(test_dir, test_sizes):
     mkdir(test_dir)
-    global n
-    maxim = 10 * maxim
     for ts in test_sizes:
-        n = math.floor(ts / 2)
         f = open('{}/{}.in'.format(test_dir, ts), 'w')
+        num_edges = ts * (ts - 1) / 2
+        acyclic_graph_edges = generate_acyclic_graph(ts, num_edges)
 
-        num = [random.randint(minimum, maxim) for _ in range(ts)]
-        num = sorted(num, reverse=True)
-
-        f.write('{}\n'.format(ts))
-        f.write('{}'.format(' '.join([str(x) for x in num])))
+        f.write('{} {}\n'.format(ts, int(num_edges)))
+        f.write('{}'.format(' \n'.join([str(edge).replace("(", "").replace(")", "").replace(",", "")
+                                        for edge in acyclic_graph_edges])))
         f.close()
 
 
@@ -74,41 +71,25 @@ def run_algo(bins, test_dir, result_dir, ts, algo, v=False):
     f_out.close()
 
 
-def read_results(results):
-    res_create = {}
-    res_find_min = {}
-    res_balance = {"BST": {'x': [], 'y': []}}
-    for file in os.listdir(results):
-        algo, size = file.split('_')
-        size = size.split('.')[0]
+def read_results(times):
+    res = {}
+    for file in os.listdir(times):
+        algo, size, _, string = file.split('_')
 
-        if algo not in res_create:
-            res_create[algo] = {'x': [], 'y': []}
-        if size not in res_create[algo]['x']:
-            res_create[algo]['x'].append(int(size))
+        if algo not in res:
+            res[algo] = {'x': [], 'y': []}
 
-        if algo not in res_find_min:
-            res_find_min[algo] = {'x': [], 'y': []}
-        if size not in res_find_min[algo]['x']:
-            res_find_min[algo]['x'].append(int(size))
+        res[algo]['x'].append(int(size))
 
-        if algo == "BST" and size not in res_balance[algo]['x']:
-            res_balance[algo]['x'].append(int(size))
-
-        f = open(results + '/' + file, 'r')
+        f = open(times + '/' + file, 'r')
         for line in f:
-            if 'create_time' in line:
+            if 'user' in line:
                 y = line.split()[1]
-                res_create[algo]['y'].append(float(y))
-            if 'find_min_time' in line:
-                y = line.split()[1]
-                res_find_min[algo]['y'].append(float(y))
-            if 'balance_time' in line and algo == "BST":
-                y = line.split()[1]
-                res_balance[algo]['y'].append(float(y))
+                # y = float(m)*60 + float(s)
 
         f.close()
-    return res_create, res_find_min, res_balance
+        res[algo]['y'].append(float(y))
+    return res
 
 
 def plot_graf(dictionary, marker, linestyle, undtitle=False):
