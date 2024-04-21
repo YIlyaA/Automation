@@ -76,17 +76,26 @@ def read_results(results):
     TwL = []
     KwM = []
     KwL = []
-    res = {}
+    sizze = []
     for file in os.listdir(results):
         algo, size, _, string = file.split('_')
         f = open(results + '/' + file, 'r')
+        sizze.append(size)
         for line in f:
-            if 'user' in line:
+            if 'Tarjan with matrix' in line:
                 time = float(line.split()[-2])/1000
-
-
+                TwM.append(time)
+            if 'Tarjan with list' in line:
+                time = float(line.split()[-2])/1000
+                TwL.append(time)
+            if 'Kahn with matrix' in line:
+                time = float(line.split()[-2])/1000
+                KwM.append(time)
+            if 'Kahn with list' in line:
+                time = float(line.split()[-2])/1000
+                KwL.append(time)
         f.close()
-    return res
+    return TwM, TwL, KwM, KwL, sizze
 
 
 def plot_graf(dictionary, marker, linestyle, undtitle=False):
