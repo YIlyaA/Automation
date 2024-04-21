@@ -71,24 +71,21 @@ def run_algo(bins, test_dir, result_dir, ts, algo, v=False):
     f_out.close()
 
 
-def read_results(times):
+def read_results(results):
+    TwM = []
+    TwL = []
+    KwM = []
+    KwL = []
     res = {}
-    for file in os.listdir(times):
+    for file in os.listdir(results):
         algo, size, _, string = file.split('_')
-
-        if algo not in res:
-            res[algo] = {'x': [], 'y': []}
-
-        res[algo]['x'].append(int(size))
-
-        f = open(times + '/' + file, 'r')
+        f = open(results + '/' + file, 'r')
         for line in f:
             if 'user' in line:
-                y = line.split()[1]
-                # y = float(m)*60 + float(s)
+                time = float(line.split()[-2])/1000
+
 
         f.close()
-        res[algo]['y'].append(float(y))
     return res
 
 
